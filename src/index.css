@@ -1,0 +1,122 @@
+/*
+ * Aesthetic direction — CADET OS
+ * Precise / calm / instrument-grade. A cockpit display, not a SaaS template.
+ * - Type: Geist (UI) + JetBrains Mono (every number). Inter was offered in the brief;
+ *   Geist was chosen because Inter is the generic default the design guide warns about.
+ * - Color: cool, single tone. Navy plane #101C2C, raised surface #1D3046, one accent
+ *   (aviation blue #71C5EB). Green = progress, amber = needs attention. Nothing else
+ *   carries meaning; categories are icon + label, never a colour.
+ * - Density: information-dense but breathing. 4px base, mostly 8/16/24.
+ * - Radius: 6px controls, 10px cards. No shadows on cards — surface contrast + hairline border.
+ * - Components: filled accent for the one primary action per screen; ghost/outline elsewhere.
+ * - Motion: quiet. 200ms ease on state changes only; disabled under reduced motion.
+ */
+@import 'tailwindcss';
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/jetbrains-mono';
+
+@theme {
+  --color-plane: #101c2c;
+  --color-surface: #1d3046;
+  --color-surface-raised: #243a54;
+  --color-well: #15253a;
+  --color-hairline: #2c4462;
+  --color-control: #6582a3;
+  --color-accent: #71c5eb;
+  --color-accent-hover: #93d4f1;
+  --color-accent-ink: #0b1624;
+  --color-ink: #e7edf4;
+  --color-muted: #93a8be;
+  --color-good: #6fcf97;
+  --color-warn: #f2b45a;
+  --color-danger: #f08080;
+
+  /* Chart series — validated (CVD ΔE ≥ 22, ≥ 3:1) against the surface. */
+  --color-series-1: #2f9fd8;
+  --color-series-2: #de6a36;
+  --color-series-3: #9282ec;
+
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'Cascadia Mono', monospace;
+
+  --radius-control: 6px;
+  --radius-card: 10px;
+
+  --animate-toast-in: toast-in 240ms ease-out;
+  --animate-fade-in: fade-in 200ms ease-out;
+
+  @keyframes toast-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    /* Keep focused elements clear of the sticky top bar and fixed tab bar. */
+    scroll-padding: 4.5rem 0 6rem;
+  }
+  @media (min-width: 1024px) {
+    html {
+      scroll-padding: 1rem 0;
+    }
+  }
+  body {
+    @apply bg-plane text-ink font-sans antialiased;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  @media (max-width: 640px) {
+    body {
+      font-size: 16px;
+    }
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--color-accent) 35%, transparent);
+  }
+  input[type='date']::-webkit-calendar-picker-indicator {
+    filter: invert(0.8);
+    cursor: pointer;
+  }
+  dialog::backdrop {
+    background: rgb(6 12 20 / 0.72);
+  }
+  .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .forced-border {
+    border: 1px solid CanvasText;
+  }
+}

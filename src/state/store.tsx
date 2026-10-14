@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import type { AppData, Attempt, JournalEntry, Session, Settings, Task } from '../types'
+import type { LabResult } from '../lab/types'
 import { newId } from '../lib/ids'
 import { createEmptyData, createSeedData } from '../lib/seed'
 import { LocalStorageStore, type DataStore } from '../lib/storage'
@@ -27,6 +28,9 @@ export interface Actions {
   addJournal(input: NewJournal): JournalEntry
   updateJournal(id: string, patch: Partial<NewJournal>): void
   deleteJournal(id: string): void
+
+  addLabResult(result: LabResult): void
+  deleteLabResult(id: string): void
 
   /** Appends already-validated items (e.g. from the AI bridge). */
   mergeItems(items: { tasks: Task[]; journal: JournalEntry[]; attempts: Attempt[] }): void
@@ -136,6 +140,13 @@ export function StoreProvider({ children, store }: { children: ReactNode; store?
       },
       deleteJournal(id) {
         patchList('journal', (l) => l.filter((j) => j.id !== id))
+      },
+
+      addLabResult(result) {
+        setData((d) => ({ ...d, lab: [...d.lab, result] }))
+      },
+      deleteLabResult(id) {
+        setData((d) => ({ ...d, lab: d.lab.filter((r) => r.id !== id) }))
       },
 
       mergeItems(items) {

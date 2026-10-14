@@ -11,6 +11,7 @@ import {
 import { isCategoryId } from './categories'
 import { isDayKey } from './dates'
 import { DEFAULT_SETTINGS } from './seed'
+import { parseLabResult } from '../lab/validate'
 
 /*
  * Hand-written validation for imported or stored data. It is strict about
@@ -224,6 +225,7 @@ export function validateAppData(input: unknown): ValidationResult {
     attempts: checkList(input.attempts, 'attempts', parseAttempt, errors),
     sessions: checkList(input.sessions, 'sessions', parseSession, errors),
     journal: checkList(input.journal, 'journal', parseJournal, errors),
+    lab: checkList(input.lab, 'lab', (o, c) => parseLabResult(o, (f, m) => c.fail(f, m)), errors),
     settings: parseSettings(input.settings, errors),
   }
   return errors.length ? { ok: false, errors } : { ok: true, data }

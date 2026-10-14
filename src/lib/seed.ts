@@ -96,6 +96,7 @@ export function createSeedData(): AppData {
     attempts: SEED_ATTEMPTS.map((a) => ({ ...a })),
     sessions: [],
     journal: [],
+    lab: [],
     settings: { ...DEFAULT_SETTINGS },
   }
 }
@@ -107,6 +108,7 @@ export function createEmptyData(settings: Settings = DEFAULT_SETTINGS): AppData 
     attempts: [],
     sessions: [],
     journal: [],
+    lab: [],
     settings: { ...settings },
   }
 }

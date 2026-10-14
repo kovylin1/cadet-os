@@ -5,6 +5,7 @@
  */
 export const CHART = {
   surface: '#1D3046',
+  well: '#15253A',
   grid: '#2C4462',
   axis: '#4A6585',
   muted: '#93A8BE',

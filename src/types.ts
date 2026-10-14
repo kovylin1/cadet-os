@@ -86,6 +86,8 @@ export interface Settings {
   weekStartsOn: 0 | 1
 }
 
+import type { LabResult } from './lab/types'
+
 export const SCHEMA_VERSION = 1
 
 export interface AppData {
@@ -94,5 +96,7 @@ export interface AppData {
   attempts: Attempt[]
   sessions: Session[]
   journal: JournalEntry[]
+  /** Aptitude Lab results (CADET OS-generated practice tests). Optional in older backups. */
+  lab: LabResult[]
   settings: Settings
 }

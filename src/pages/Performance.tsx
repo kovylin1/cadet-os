@@ -42,6 +42,7 @@ import { Card, CardHeader, Eyebrow } from '../components/ui/Card'
 import { ConfirmDialog } from '../components/ui/Dialog'
 import { CategoryChip, EmptyState, Note } from '../components/ui/Misc'
 import { Segmented } from '../components/ui/Segmented'
+import { LabPanel } from '../components/lab/LabPanel'
 
 type Filter = 'all' | CategoryId
 
@@ -115,6 +116,10 @@ export function Performance() {
         )}
 
         <AttemptTable attempts={inCategory} onEdit={setEditing} showCategory={filter === 'all'} />
+
+        {(filter === 'all' || filter === 'math' || filter === 'physics') && (
+          <LabPanel results={data.lab} subjects={filter === 'all' ? ['math', 'physics'] : [filter]} />
+        )}
 
         <FatigueSection
           sessions={data.sessions}

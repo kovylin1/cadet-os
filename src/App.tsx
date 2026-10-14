@@ -11,10 +11,13 @@ import { ToastProvider } from './state/toast'
 
 // Recharts lives only on Performance, so it loads on demand and keeps first paint light.
 const Performance = lazy(() => import('./pages/Performance').then((m) => ({ default: m.Performance })))
+// The question generator is sizeable and only needed in the Aptitude Lab.
+const Study = lazy(() => import('./pages/Study').then((m) => ({ default: m.Study })))
 
 const PAGES = {
   overview: Overview,
   calendar: Calendar,
+  study: Study,
   performance: Performance,
   journal: Journal,
   settings: Settings,
@@ -26,7 +29,7 @@ function Router() {
   const first = useRef(true)
 
   useEffect(() => {
-    document.title = `${ROUTES.find((r) => r.id === route)!.label} · CADET OS`
+    document.title = `${route === 'study' ? 'Aptitude Lab' : ROUTES.find((r) => r.id === route)!.label} · CADET OS`
     // On in-app navigation, move focus to main so screen readers announce the new page.
     if (first.current) {
       first.current = false

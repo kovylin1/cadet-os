@@ -17,8 +17,20 @@ Other scripts:
 ```bash
 npm run build      # typecheck + production build into dist/
 npm run preview    # serve the production build
-npm test           # unit tests (metrics, import validation)
+npm test           # unit tests (metrics, import validation, question generator)
 ```
+
+## Aptitude Lab (Study → Mathematics / Physics)
+
+Generated practice tests for the maths and physics papers. Everything runs offline; no AI is involved at runtime.
+
+- **Engine** (`src/lab/`): 61 parameterised templates — 29 maths (mental arithmetic, fractions/percentages/ratios, speed–distance–time, fuel, unit conversions, time zones, algebra, averages, charts/tables, geometry & 1-in-60) and 32 physics (Newton, force/weight, motion, energy/power, momentum, pressure/density, aerodynamics, electricity, heat/ISA, waves, levers/pulleys, particles). Each draws its own numbers, computes the answer from them, and lists wrong answers that come from real mistakes (forgetting the reserve, decimal hours read as minutes, statute vs nautical miles, °C instead of kelvin…). Choices are built and validated before display: four unique options, one correct, clear numeric gaps, A–D balanced across a test.
+- **Reproducible**: a question is stored only as `{templateId, difficulty, seed, slot}` and rebuilt from it, so results stay small and every test can be replayed.
+- **Difficulty**: Basic (one step), Intermediate (two steps, conversions), Advanced (multi-step, combined formulas, assumptions). *Adaptive mixed* weights topics and levels by your recent accuracy, pace and exposure.
+- **Test screen**: timer against an absolute deadline (survives reloads, auto-submits), question grid, flag for review, A–D / ←→ / F keys, optional calculator, *Check answer* with worked solution in untimed practice. In-progress tests are saved under `cadet-os:lab-active`.
+- **Results**: score, time, accuracy by subject/topic/difficulty, fastest/slowest, flagged, full review with step-by-step working, *Practise my weak areas*, add to calendar, journal reflection. History and trends (accuracy, pace, consistency, topic mastery) per subject; also shown on Performance as a separate "Aptitude Lab" panel.
+- Lab accuracy is its own scale: never merged with recorded provider scores, never converted to sten, no selection predictions. Time limits are practice settings, not official ADAPT limits. Questions are original; no affiliation with Symbiotics, PilotSphere or Air Astana.
+- Tests: `src/lab/engine.test.ts` generates 20,000+ questions across every template and level, re-derives answers independently from the question text for key templates, and checks variety, A–D balance, difficulty progression and weak-area weighting.
 
 ## Filling a result from a file
 
@@ -58,6 +70,7 @@ src/
     validate.ts          strict validation for import and stored data
     storage.ts           DataStore interface + LocalStorageStore
     seed.ts              13 Oct 2026 practice results (editable/removable)
+  lab/                   Aptitude Lab: rng, build/validation, math & physics templates, engine, stats, session
     categories.ts        9 categories (icon + label, scorable flag)
   state/                 store (React context + actions), toasts
   components/
@@ -65,7 +78,7 @@ src/
     forms/               Task, Attempt, Session check-in, Journal
     charts/              ScoreChart, EnergyChart, FatigueScatter, Sparkline
     layout/              AppShell (sidebar on desktop, bottom tabs on mobile)
-  pages/                 Overview, Calendar, Performance, Journal, Settings
+  pages/                 Overview, Calendar, Study (Aptitude Lab), Performance, Journal, Settings
 design_instructions/     design guidance the UI follows (kept locally, not in the repo)
 ```
 

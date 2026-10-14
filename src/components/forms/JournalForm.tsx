@@ -19,20 +19,23 @@ type PromptKey = (typeof JOURNAL_PROMPTS)[number]['key']
 interface JournalFormProps {
   entry?: JournalEntry | null
   defaultCategory?: CategoryId | null
+  /** Starting text for a new entry (e.g. a test summary). */
+  prefill?: Partial<Record<PromptKey, string>>
+  defaultDate?: string
   onDone: () => void
   onCancel?: () => void
 }
 
-export function JournalForm({ entry, defaultCategory, onDone, onCancel }: JournalFormProps) {
+export function JournalForm({ entry, defaultCategory, prefill, defaultDate, onDone, onCancel }: JournalFormProps) {
   const actions = useActions()
   const toast = useToast()
-  const [date, setDate] = useState(entry?.date ?? todayKey())
+  const [date, setDate] = useState(entry?.date ?? defaultDate ?? todayKey())
   const [cat, setCat] = useState<CategoryId | ''>(entry?.category ?? defaultCategory ?? '')
   const [text, setText] = useState<Record<PromptKey, string>>({
-    wentWell: entry?.wentWell ?? '',
-    difficult: entry?.difficult ?? '',
-    learned: entry?.learned ?? '',
-    changeNext: entry?.changeNext ?? '',
+    wentWell: entry?.wentWell ?? prefill?.wentWell ?? '',
+    difficult: entry?.difficult ?? prefill?.difficult ?? '',
+    learned: entry?.learned ?? prefill?.learned ?? '',
+    changeNext: entry?.changeNext ?? prefill?.changeNext ?? '',
   })
   const [error, setError] = useState<string | null>(null)
 

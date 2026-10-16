@@ -7,6 +7,7 @@ import { Overview } from './pages/Overview'
 import { Settings } from './pages/Settings'
 import { CheckInProvider } from './state/checkin'
 import { StoreProvider } from './state/store'
+import { SyncProvider } from './state/sync'
 import { ToastProvider } from './state/toast'
 
 // Recharts lives only on Performance, so it loads on demand and keeps first paint light.
@@ -52,9 +53,11 @@ export default function App() {
   return (
     <ToastProvider>
       <StoreProvider>
-        <CheckInProvider>
-          <Router />
-        </CheckInProvider>
+        <SyncProvider>
+          <CheckInProvider>
+            <Router />
+          </CheckInProvider>
+        </SyncProvider>
       </StoreProvider>
     </ToastProvider>
   )

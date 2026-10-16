@@ -13,6 +13,8 @@ import { ConfirmDialog, Dialog } from '../components/ui/Dialog'
 import { Field, Input, Select } from '../components/ui/Field'
 import { Note } from '../components/ui/Misc'
 import { AiBridgeButton } from '../components/AiBridge'
+import { SyncCard } from '../components/SyncCard'
+import { useSync } from '../state/sync'
 
 type Pending = { kind: 'reset' } | { kind: 'clear' }
 
@@ -21,6 +23,7 @@ export function Settings() {
   const actions = useActions()
   const toast = useToast()
   const fileRef = useRef<HTMLInputElement>(null)
+  const synced = useSync().login != null
 
   const [callsign, setCallsign] = useState(data.settings.callsign)
   const [assessmentDate, setAssessmentDate] = useState(data.settings.assessmentDate)
@@ -136,12 +139,15 @@ export function Settings() {
           </div>
         </Card>
 
+        <SyncCard />
+
         <Card aria-labelledby="data-heading">
           <CardHeader id="data-heading" title="Your data" description={`Currently stored: ${counts(data)}.`} />
           <div className="flex flex-col gap-5 px-4 pt-4 pb-5 sm:px-5">
             <Note icon={ShieldCheck}>
-              Everything stays in this browser on this device. Nothing is uploaded. Export a backup now and then — clearing
-              browser data will erase it.
+              {synced
+                ? 'Saved in this browser and synced to your private GitHub Gist.'
+                : 'Everything stays in this browser on this device until you turn on cloud sync above. Clearing browser data will erase it — export a backup now and then.'}
             </Note>
 
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
